@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Europe Trip Fun Card</title>
+<script>
+// 🔥 SET DEPARTURE DATE & TIME HERE (YYYY-MM-DDTHH:MM:SS)
+const departureDate = new Date("2026-02-12T22:30:00").getTime(); 
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const diff = departureDate - now;
+
+  if (diff <= 0) {
+    document.getElementById("countdown").innerHTML = "✈️ She is in Europe already!";
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  document.getElementById("countdown").innerHTML =
+    `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+</script>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #1d2671, #c33764);
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  padding: 30px;
+  border-radius: 20px;
+  width: 800px;
+  margin: auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  margin-bottom: 30px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.yes {
+  background: #00ff99;
+  color: black;
+}
+
+.no {
+  background: #ff4d4d;
+  color: white;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+  .countdown-card {
+    margin: 20px auto;
+    padding: 15px;
+    width: 420px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    backdrop-filter: blur(8px);
+    font-size: 20px;
+  }
+
+  #countdown {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #00ffcc;
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>✈️ Bon Voyage, Sampada🇪🇺</h1>
+</header>
+
+<section class="card">
+  <h2>🌟 Europe Is Calling 🌟</h2>
+  <p>
+    from charming streets to iconic landmarks, may this Europe trip be full of magic, memories, and amazing stories.  
+    Travel safe, explore more, and spam us with photos 📸😉 </p>
+</section>
+
+<!--<section class="card">-->
+<!--  <h2>📸 Family Memories Slideshow</h2>-->
+<!--  <div class="slideshow">-->
+<!--    <img class="slide" src="https://via.placeholder.com/500x300?text=Family+Photo+1" />-->
+<!--    <img class="slide" src="https://via.placeholder.com/500x300?text=Family+Photo+2" />-->
+<!--    <img class="slide" src="https://via.placeholder.com/500x300?text=Family+Photo+3" />-->
+<!--  </div>-->
+<!--</section>-->
+
+<section class="card">
+
+  <p>Will you bring chocolates for everyone?</p>
+  <button class="yes">YES</button>
+  <button class="no">NO</button>
+
+  <p>Will you miss Indian food after 2 days?</p>
+  <button class="yes">YES</button>
+  <button class="no">NO</button>
+
+  <p>Will you shop till your suitcase breaks?</p>
+  <button class="yes">YES</button>
+  <button class="no">NO</button>
+</section>
+
+<section class="card">
+<h2>🛡️ Take Care & Stay Safe</h2>
+  <ul style="text-align:left; max-width:600px; margin:auto;">
+    <li>Keep passport and documents safe</li>
+    <li>Stay connected with us</li>
+    <li>Don’t forget to charge your phone</li>
+    <li>Be careful with food & weather</li>
+    <li>Enjoy but stay safe ❤️</li>
+  </ul>
+</section>
+
+<div class="countdown-card">
+  <h2>⏳ Countdown to Europe Takeoff</h2>
+  <div id="countdown"></div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+// Confetti Cannon Code (REAL)
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+let confetti = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+function randomColor() {
+  const colors = ["#ff0a54","#ff477e","#ff7096","#ffd166","#06d6a0","#118ab2","#8338ec"];
+  return colors[Math.floor(Math.random()*colors.length)];
+}
+
+function createConfettiBurst() {
+  for (let i = 0; i < 200; i++) {
+    confetti.push({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      vx: (Math.random() - 0.5) * 10,
+      vy: (Math.random() - 0.5) * 10,
+      size: Math.random() * 6 + 4,
+      color: randomColor(),
+      gravity: 0.15
+    });
+  }
+}
+
+function updateConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  confetti.forEach((c, index) => {
+    c.vy += c.gravity;
+    c.x += c.vx;
+    c.y += c.vy;
+
+    ctx.fillStyle = c.color;
+    ctx.fillRect(c.x, c.y, c.size, c.size);
+
+    if (c.y > canvas.height) confetti.splice(index, 1);
+  });
+
+  requestAnimationFrame(updateConfetti);
+}
+updateConfetti();
+
+// Trigger cannon on YES
+document.querySelectorAll(".yes").forEach(btn => {
+  btn.addEventListener("click", () => {
+    createConfettiBurst();
+  });
+});
+
+document.querySelectorAll(".no").forEach(btn=>{
+  btn.onmouseover = () => {
+    btn.style.position = "absolute";
+    btn.style.left = Math.random()*80 + "vw";
+    btn.style.top = Math.random()*80 + "vh";
+  };
+});
+</script>
+
+</body>
+</html>
