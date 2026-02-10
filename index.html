@@ -4,29 +4,45 @@
 <meta charset="UTF-8">
 <title>Europe Trip Fun Card</title>
 <script>
-// 🔥 SET DEPARTURE DATE & TIME HERE (YYYY-MM-DDTHH:MM:SS)
-const departureDate = new Date("2026-02-12T05:00:00").getTime(); 
+const departureDate = new Date("2026-03-10T22:30:00").getTime();
 
-function updateCountdown() {
+function updateFlipTimer() {
   const now = new Date().getTime();
   const diff = departureDate - now;
 
-  if (diff <= 0) {
-    document.getElementById("countdown").innerHTML = "✈️ She is in Europe already!";
-    return;
-  }
+  if (diff <= 0) return;
 
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
+  const d = Math.floor(diff / (1000*60*60*24));
+  const h = Math.floor((diff / (1000*60*60)) % 24);
+  const m = Math.floor((diff / (1000*60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
 
-  document.getElementById("countdown").innerHTML =
-    `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  document.getElementById("d").innerText = d;
+  document.getElementById("h").innerText = h;
+  document.getElementById("m").innerText = m;
+  document.getElementById("s").innerText = s;
 }
+setInterval(updateFlipTimer, 1000);
+updateFlipTimer();
+</script>
 
-setInterval(updateCountdown, 1000);
-updateCountdown();
+<script>
+const pathBg = document.getElementById("routePathBg");
+const planeBg = document.getElementById("routePlaneBg");
+const lengthBg = pathBg.getTotalLength();
+let progressBg = 0;
+
+function animateRouteBg() {
+  progressBg += 0.0008; // slow background animation
+  if (progressBg > 1) progressBg = 0;
+
+  const point = pathBg.getPointAtLength(progressBg * lengthBg);
+  planeBg.setAttribute("x", point.x);
+  planeBg.setAttribute("y", point.y);
+
+  requestAnimationFrame(animateRouteBg);
+}
+animateRouteBg();
 </script>
 
 <style>
@@ -92,6 +108,150 @@ canvas {
     margin-top: 10px;
     color: #00ffcc;
   }
+  
+  flip-timer {
+  margin: 20px auto;
+  padding: 20px;
+  width: 450px;
+  background: rgba(0,0,0,0.65);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+}
+
+.flip-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.flip-box {
+  background: black;
+  padding: 10px 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.flip-box span {
+  font-size: 36px;
+  font-weight: bold;
+  color: #00ffcc;
+  display: block;
+}
+
+.flip-box small {
+  font-size: 12px;
+  color: #aaa;
+}
+.city-time {
+  margin: 15px auto;
+  padding: 12px;
+  width: 450px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 12px;
+  font-size: 18px;
+}
+
+.city-time {
+  margin: 15px auto;
+  padding: 12px;
+  width: 450px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 12px;
+  font-size: 18px;
+}
+
+.route-card {
+  margin: 20px auto;
+  width: 600px;
+  background: rgba(0,0,0,0.65);
+  padding: 15px;
+  border-radius: 15px;
+  backdrop-filter: blur(8px);
+}
+
+#routeMap {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.flip-timer {
+  position: relative;
+  width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+}
+
+ Background SVG 
+#routeMapBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.25;
+  z-index: 0;
+}
+
+ Countdown content on top 
+.flip-timer h2,
+.flip-container {
+  position: relative;
+  z-index: 2;
+}
+
+ Flip timer boxes 
+.flip-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.flip-box {
+  background: black;
+  padding: 10px 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.flip-box span {
+  font-size: 36px;
+  font-weight: bold;
+  color: #00ffcc;
+}
+
+#routePathBg {
+  filter: drop-shadow(0 0 6px cyan);
+}
+
+#routeMapBg image {
+  filter: grayscale(100%) brightness(0.4);
+}
+
+#routeMap {
+  width: 100%;
+  border-radius: 10px;
+}
+
+#routePlane {
+  dominant-baseline: middle;
+  text-anchor: middle;
+  font-size: 22px;
+}
+
+#routePath {
+  filter: drop-shadow(0 0 6px cyan);
+}
+
+#routeMap image {
+  filter: grayscale(100%) brightness(0.4);
+}
+
 </style>
 </head>
 
@@ -143,9 +303,69 @@ canvas {
   </ul>
 </section>
 
-<div class="countdown-card">
-  <h2>⏳ Countdown to Europe Takeoff</h2>
-  <div id="countdown"></div>
+<<div class="route-card">
+  <svg id="routeMap" viewBox="0 0 800 400" preserveAspectRatio="none">
+
+    <image href="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg"
+           width="800" height="400"/>
+
+    <!-- Route Line -->
+    <path id="routePath"
+      d="M 210 260 Q 350 120 520 140"
+      stroke="cyan"
+      stroke-width="3"
+      fill="none"
+      stroke-dasharray="8 8"
+    />
+
+    <!-- Plane -->
+    <text id="routePlane" font-size="22">✈️</text>
+
+    <!-- Labels -->
+    <text x="190" y="280" fill="white">Mumbai 🇮🇳</text>
+    <text x="500" y="120" fill="white">Europe 🇫🇷</text>
+
+  </svg>
+  <script>
+window.onload = function () {
+
+  const path = document.getElementById("routePath");
+  const plane = document.getElementById("routePlane");
+
+  if (!path || !plane) {
+    console.log("Plane or path not found");
+    return;
+  }
+
+  const length = path.getTotalLength();
+  let progress = 0;
+
+  function animatePlane() {
+    progress += 0.004; // speed (0.0005 slow, 0.002 fast)
+    if (progress > 1) progress = 0;
+
+    const point = path.getPointAtLength(progress * length);
+    plane.setAttribute("x", point.x);
+    plane.setAttribute("y", point.y);
+
+    requestAnimationFrame(animatePlane);
+  }
+
+  animatePlane();
+};
+</script>
+
+</div>
+
+
+<div class="flip-timer">
+  <h2>✈️ Countdown to Takeoff</h2>
+  <div class="flip-container">
+    <div class="flip-box"><span id="d">00</span><small>Days</small></div>
+    <div class="flip-box"><span id="h">00</span><small>Hours</small></div>
+    <div class="flip-box"><span id="m">00</span><small>Minutes</small></div>
+    <div class="flip-box"><span id="s">00</span><small>Seconds</small></div>
+  </div>
 </div>
 
 <canvas id="confetti"></canvas>
