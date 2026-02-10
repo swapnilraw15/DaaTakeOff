@@ -374,13 +374,35 @@ canvas {
   100% { border-color: white; }
 }
 
+.polaroid {
+  background: white;
+  padding: 15px 15px 40px;
+  width: 280px;
+  margin: auto;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  transform: rotate(-2deg);
+}
+
+.polaroid img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.caption {
+  color: black;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>✈️ Bon Voyage, Sampada🇪🇺</h1>
+  <h1>✈️ Bon Voyage, Sampadaaa!</h1>
 </header>
 
 <section class="card">
@@ -389,15 +411,6 @@ canvas {
     from charming streets to iconic landmarks, may this Europe trip be full of magic, memories, and amazing stories.  
     Travel safe, explore more, and spam us with photos 📸😉 </p>
 </section>
-
-<!--<section class="card">-->
-<!--  <h2>📸 Family Memories Slideshow</h2>-->
-<!--  <div class="slideshow">-->
-<!--    <img class="slide" src="https://via.placeholder.com/500x300?text=Family+Photo+1" />-->
-<!--    <img class="slide" src="https://via.placeholder.com/500x300?text=Family+Photo+2" />-->
-<!--    <img class="slide" src="https://via.placeholder.com/500x300?text=Family+Photo+3" />-->
-<!--  </div>-->
-<!--</section>-->
 
 <section class="card">
 
@@ -507,16 +520,6 @@ window.onload = function () {
       </div>
     </div>
 
-    <!--<div class="clock-box">-->
-    <!--  <h3>🇱🇺 Luxembourg</h3>-->
-    <!--  <div class="clock" id="luxClock">-->
-    <!--    <div class="hand hour" id="luxHour"></div>-->
-    <!--    <div class="hand minute" id="luxMinute"></div>-->
-    <!--    <div class="hand second" id="luxSecond"></div>-->
-    <!--    <div class="center-dot"></div>-->
-    <!--  </div>-->
-    <!--</div>-->
-
   </div>
 </section>
 
@@ -587,6 +590,12 @@ document.querySelectorAll(".no").forEach(btn=>{
 });
 </script>
 
+<section class="card">
+  <div class="polaroid">
+    <img src="IMG_2892.jpg">
+    <div class="caption">She is waiting alreadyyyy...</div>
+  </div>
+</section>
 <!--<section class="card">-->
 <!--  <h2 id="byeText"></h2>-->
 <!--</section>-->
@@ -621,6 +630,9 @@ document.addEventListener("DOMContentLoaded", () => {
   loopType();
 });
 </script>
+
+
+
 
 
 </body>
