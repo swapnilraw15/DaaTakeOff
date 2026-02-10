@@ -45,6 +45,45 @@ function animateRouteBg() {
 animateRouteBg();
 </script>
 
+<script>
+function updateAnalogClocks() {
+  const now = new Date();
+
+  // Germany & Luxembourg timezone
+  const options = { timeZone: "Europe/Berlin" };
+  const germanyTime = new Date(now.toLocaleString("en-US", options));
+
+  const h = germanyTime.getHours();
+  const m = germanyTime.getMinutes();
+  const s = germanyTime.getSeconds();
+
+  const hourDeg = (h % 12) * 30 + m * 0.5;
+  const minDeg = m * 6;
+  const secDeg = s * 6;
+
+  // Germany
+  document.getElementById("germanyHour").style.transform =
+    `translateX(-50%) rotate(${hourDeg}deg)`;
+  document.getElementById("germanyMinute").style.transform =
+    `translateX(-50%) rotate(${minDeg}deg)`;
+  document.getElementById("germanySecond").style.transform =
+    `translateX(-50%) rotate(${secDeg}deg)`;
+
+  // Luxembourg (same time zone)
+  document.getElementById("luxHour").style.transform =
+    `translateX(-50%) rotate(${hourDeg}deg)`;
+  document.getElementById("luxMinute").style.transform =
+    `translateX(-50%) rotate(${minDeg}deg)`;
+  document.getElementById("luxSecond").style.transform =
+    `translateX(-50%) rotate(${secDeg}deg)`;
+}
+
+setInterval(updateAnalogClocks, 1000);
+updateAnalogClocks();
+</script>
+
+
+
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -252,6 +291,89 @@ canvas {
   filter: grayscale(100%) brightness(0.4);
 }
 
+.analog-clocks {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 15px;
+}
+
+.clock-box {
+  text-align: center;
+}
+
+.clock {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border: 6px solid white;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  box-shadow: 0 0 20px cyan;
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  transform: translateX(-50%);
+  background: white;
+}
+
+.hour {
+  width: 5px;
+  height: 40px;
+}
+
+.minute {
+  width: 3px;
+  height: 55px;
+}
+
+.second {
+  width: 2px;
+  height: 65px;
+  background: red;
+}
+
+.center-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.clock {
+  backdrop-filter: blur(6px);
+  border: 2px solid cyan;
+}
+
+.clock {
+  backdrop-filter: blur(6px);
+  border: 2px solid cyan;
+}
+#byeText {
+  font-size: 32px;
+  font-weight: bold;
+  border-right: 3px solid white;
+  display: inline-block;
+  padding-right: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0% { border-color: white; }
+  50% { border-color: transparent; }
+  100% { border-color: white; }
+}
+
 </style>
 </head>
 
@@ -303,7 +425,7 @@ canvas {
   </ul>
 </section>
 
-<<div class="route-card">
+<div class="route-card">
   <svg id="routeMap" viewBox="0 0 800 400" preserveAspectRatio="none">
 
     <image href="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg"
@@ -370,6 +492,35 @@ window.onload = function () {
 
 <canvas id="confetti"></canvas>
 
+<section class="card">
+  <h2>🕰️ Europe Local Time</h2>
+
+  <div class="analog-clocks">
+    
+    <div class="clock-box">
+
+      <div class="clock" id="germanyClock">
+        <div class="hand hour" id="germanyHour"></div>
+        <div class="hand minute" id="germanyMinute"></div>
+        <div class="hand second" id="germanySecond"></div>
+        <div class="center-dot"></div>
+      </div>
+    </div>
+
+    <!--<div class="clock-box">-->
+    <!--  <h3>🇱🇺 Luxembourg</h3>-->
+    <!--  <div class="clock" id="luxClock">-->
+    <!--    <div class="hand hour" id="luxHour"></div>-->
+    <!--    <div class="hand minute" id="luxMinute"></div>-->
+    <!--    <div class="hand second" id="luxSecond"></div>-->
+    <!--    <div class="center-dot"></div>-->
+    <!--  </div>-->
+    <!--</div>-->
+
+  </div>
+</section>
+
+
 <script>
 // Confetti Cannon Code (REAL)
 const canvas = document.getElementById("confetti");
@@ -435,6 +586,42 @@ document.querySelectorAll(".no").forEach(btn=>{
   };
 });
 </script>
+
+<!--<section class="card">-->
+<!--  <h2 id="byeText"></h2>-->
+<!--</section>-->
+<section class="card bye-card">
+  <img src="your-photo.jpg" class="bye-photo" />
+  <h2 id="byeText"></h2>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const text = "👋 Bye Byee Sampada!";
+  const el = document.getElementById("byeText");
+  let i = 0, deleting = false;
+
+  function loopType() {
+    if (!deleting) {
+      el.innerHTML = text.substring(0, i++);
+      if (i > text.length) {
+        deleting = true;
+        setTimeout(loopType, 2000);
+        return;
+      }
+    } else {
+      el.innerHTML = text.substring(0, i--);
+      if (i < 0) {
+        deleting = false;
+        i = 0;
+      }
+    }
+    setTimeout(loopType, deleting ? 80 : 180);
+  }
+  loopType();
+});
+</script>
+
 
 </body>
 </html>
